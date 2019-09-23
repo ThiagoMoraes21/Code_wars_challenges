@@ -27,6 +27,16 @@
     (or equivalent in other languages)
 */
 
+function pickPeaks(arr) {
+    let pos = [];
+    let peaks = [];
+    if(arr.length === 0) return {pos: [], peaks: []};
+    for(let i = 1; i < arr.length - 1; i++) {
+        if(arr[i] > arr[i - 1] && arr[i] > arr[i + 1])
+            pos.push(i), peaks.push(arr[i])
+    }
+    return {pos: pos, peaks: peaks};
+}
 
 
 // tests 
