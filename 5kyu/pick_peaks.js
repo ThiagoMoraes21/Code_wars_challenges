@@ -27,23 +27,27 @@
     (or equivalent in other languages)
 */
 
+// brute force
 function pickPeaks(arr) {
-    let pos = [];
-    let peaks = [];
-    if(arr.length === 0) return {pos: [], peaks: []};
-    for(let i = 1; i < arr.length - 1; i++) {
-        if(arr[i] > arr[i - 1] && arr[i] > arr[i + 1])
-            pos.push(i), peaks.push(arr[i])
+    let res = { pos: [], peaks: [] };
+    if (arr.length === 0) return res;
+    for (let i = 1; i < arr.length - 1; i++) {
+        if (arr[i] >= arr[i - 1] && arr[i] >= arr[i + 1]) {
+            if (!arr.includes(res.pos[i]))
+                res.pos.push(i), res.peaks.push(arr[i]);
+        }
+        else if (arr[i] === arr[i - 1] && arr[i] < arr[i + 1]) {
+            res.pos.pop(), res.peaks.pop();
+        }
     }
-    return {pos: pos, peaks: peaks};
+    return res;
 }
-
 
 // tests 
 const Test = {
     assertDeepEquals: (output, expected) => {
-        const pos = output.pos.every((el, index) => el === expected.pos[index]);
-        const peaks = output.peaks.every((el, index) => el === expected.peaks[index]);
+        const pos = expected.pos.every((el, index) => el === output.pos[index]);
+        const peaks = expected.peaks.every((el, index) => el === output.peaks[index]);
         return pos && peaks ?
         console.log('Test passed!') :
         console.log(`Test failed: ${JSON.stringify(output)} should be ${JSON.stringify(expected)}`);
