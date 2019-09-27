@@ -27,20 +27,38 @@
     (or equivalent in other languages)
 */
 
-// brute force
 function pickPeaks(arr) {
-    let res = { pos: [], peaks: [] };
-    if (arr.length === 0) return res;
-    for (let i = 1; i < arr.length - 1; i++) {
-        if (arr[i] >= arr[i - 1] && arr[i] >= arr[i + 1]) {
-            if (!arr.includes(res.pos[i]))
-                res.pos.push(i), res.peaks.push(arr[i]);
-        }
-        else if (arr[i] === arr[i - 1] && arr[i] < arr[i + 1]) {
-            res.pos.pop(), res.peaks.pop();
+    let output = {pos: [], peaks: []};
+    let topPeak = arr[0];
+    let topPos = 0;
+    if(arr.length === 0) return output;
+    for(let i = 0; i < arr.length; i++) {
+        if(arr[i] > arr[i - 1])
+            topPeak = arr[i], topPos = i;
+        else if(arr[i] < arr[i - 1])
+            if(topPos > 0)
+                output.pos.push(topPos),
+                output.peaks.push(topPeak),
+                topPos = 0;
+    }
+    return output;
+}
+
+function pickPeaks_clever(arr) {
+    var result = { pos: [], peaks: [] };
+    if (arr.length > 2) {
+        var pos = -1;
+        for (var i = 1; i < arr.length; i++) {
+            if (arr[i] > arr[i - 1]) {
+                pos = i;
+            } else if (arr[i] < arr[i - 1] && pos != -1) {
+                result.pos.push(pos);
+                result.peaks.push(arr[pos]);
+                pos = -1;
+            }
         }
     }
-    return res;
+    return result;
 }
 
 // tests 
@@ -48,7 +66,7 @@ const Test = {
     assertDeepEquals: (output, expected) => {
         const pos = expected.pos.every((el, index) => el === output.pos[index]);
         const peaks = expected.peaks.every((el, index) => el === output.peaks[index]);
-        return pos && peaks ?
+        return pos && peaks && expected.pos.length === output.pos.length && expected.peaks.length === output.peaks.length ?
         console.log('Test passed!') :
         console.log(`Test failed: ${JSON.stringify(output)} should be ${JSON.stringify(expected)}`);
     }
@@ -64,3 +82,18 @@ Test.assertDeepEquals(pickPeaks([2, 1, 3, 2, 2, 2, 2, 1]), { pos: [2], peaks: [3
 Test.assertDeepEquals(pickPeaks([1, 2, 5, 4, 3, 2, 3, 6, 4, 1, 2, 3, 3, 4, 5, 3, 2, 1, 2, 3, 5, 5, 4, 3]), { pos: [2, 7, 14, 20], peaks: [5, 6, 5, 5] });
 Test.assertDeepEquals(pickPeaks([]), { pos: [], peaks: [] });
 Test.assertDeepEquals(pickPeaks([1, 1, 1, 1]), { pos: [], peaks: [] });
+Test.assertDeepEquals(pickPeaks([5]), { pos: [], peaks: [] });
+Test.assertDeepEquals(pickPeaks([1, 8, 15, 3, 4, 8, 6, 7, 0, 6, 11, -2, 13, 5, 0, 6, 3, 13, 8, 8, 14, 2, 9, -4]), { pos: [2, 5, 7, 10, 12, 15, 17, 20, 22], peaks: [15, 8, 7, 11, 13, 6, 13, 14, 9] });
+
+Test.assertDeepEquals(pickPeaks_clever([1, 2, 3, 6, 4, 1, 2, 3, 2, 1]), { pos: [3, 7], peaks: [6, 3] });
+Test.assertDeepEquals(pickPeaks_clever([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3]), { pos: [3, 7], peaks: [6, 3] });
+Test.assertDeepEquals(pickPeaks_clever([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 2, 2, 1]), { pos: [3, 7, 10], peaks: [6, 3, 2] });
+Test.assertDeepEquals(pickPeaks_clever([2, 1, 3, 1, 2, 2, 2, 2, 1]), { pos: [2, 4], peaks: [3, 2] });
+Test.assertDeepEquals(pickPeaks_clever([2, 1, 3, 1, 2, 2, 2, 2]), { pos: [2], peaks: [3] });
+Test.assertDeepEquals(pickPeaks_clever([2, 1, 3, 2, 2, 2, 2, 5, 6]), { pos: [2], peaks: [3] });
+Test.assertDeepEquals(pickPeaks_clever([2, 1, 3, 2, 2, 2, 2, 1]), { pos: [2], peaks: [3] });
+Test.assertDeepEquals(pickPeaks_clever([1, 2, 5, 4, 3, 2, 3, 6, 4, 1, 2, 3, 3, 4, 5, 3, 2, 1, 2, 3, 5, 5, 4, 3]), { pos: [2, 7, 14, 20], peaks: [5, 6, 5, 5] });
+Test.assertDeepEquals(pickPeaks_clever([]), { pos: [], peaks: [] });
+Test.assertDeepEquals(pickPeaks_clever([1, 1, 1, 1]), { pos: [], peaks: [] });
+Test.assertDeepEquals(pickPeaks_clever([5]), { pos: [], peaks: [] });
+Test.assertDeepEquals(pickPeaks_clever([1, 8, 15, 3, 4, 8, 6, 7, 0, 6, 11, -2, 13, 5, 0, 6, 3, 13, 8, 8, 14, 2, 9, -4]), { pos: [2, 5, 7, 10, 12, 15, 17, 20, 22], peaks: [15, 8, 7, 11, 13, 6, 13, 14, 9] });
