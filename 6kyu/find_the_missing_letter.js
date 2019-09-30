@@ -30,10 +30,9 @@ function findMissingLetter(arr) {
 
 // optmizing
 function findMissingLetter_opt(arr) {
-    for (let i = 0; i < arr.length - 1; i++) {
+    for (let i = 0; i < arr.length - 1; i++) 
         if (String.fromCharCode(arr[i].charCodeAt(0) + 1) != arr[i + 1])
             return String.fromCharCode(arr[i].charCodeAt(0) + 1);
-    }
 }
 
 // tests
