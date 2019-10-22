@@ -61,6 +61,18 @@ function tickets(arr) {
     return 'YES';
 }
 
+// clever solution
+function tickets_clever(peopleInLine) {
+    let [c25, c50, c100] = [0, 0, 0];
+    for (let v of peopleInLine) {
+        if (v === 25) c25++;
+        if (v === 50) { c50++; c25--; }
+        if (v === 100) { c25--; c50 > 0 ? c50-- : c25 -= 2; }
+        if (c25 < 0 || c50 < 0) return 'NO'
+    }
+    return 'YES'
+}
+
 // tests
 const Test = {
     assertEquals: (output, expected) => {
@@ -76,3 +88,11 @@ Test.assertEquals(tickets([25, 25, 50, 50, 100]), "NO");
 Test.assertEquals(tickets([25, 50, 25, 100, 25, 50, 25, 100, 25, 25, 50, 100]), "YES");
 Test.assertEquals(tickets([25,50,25,100,25,50,25,100,25,50,25,100,25,25,25,100,25,25,50,100]), "YES");
 Test.assertEquals(tickets([25, 25, 50, 100, 25, 25, 25, 100, 25, 25, 25, 100, 25, 25, 50, 100, 25, 25, 50, 100]), "YES");
+
+Test.assertEquals(tickets_clever([25, 25, 50, 50]), "YES");
+Test.assertEquals(tickets_clever([25, 100]), "NO");
+Test.assertEquals(tickets_clever([25, 25, 50]), "YES");
+Test.assertEquals(tickets_clever([25, 25, 50, 50, 100]), "NO");
+Test.assertEquals(tickets_clever([25, 50, 25, 100, 25, 50, 25, 100, 25, 25, 50, 100]), "YES");
+Test.assertEquals(tickets_clever([25,50,25,100,25,50,25,100,25,50,25,100,25,25,25,100,25,25,50,100]), "YES");
+Test.assertEquals(tickets_clever([25, 25, 50, 100, 25, 25, 25, 100, 25, 25, 25, 100, 25, 25, 50, 100, 25, 25, 50, 100]), "YES");
