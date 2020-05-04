@@ -34,7 +34,21 @@ const getPlanetName = id => {
         break;
     }
     return name;
-  }
+}
+
+const getPlanetName_optimal = id => {
+    const planets = {
+        '1': 'Mercury',
+        '2': 'Venus',
+        '3': 'Earth',
+        '4': 'Mars',
+        '5': 'Jupiter',
+        '6': 'Saturn',
+        '7': 'Uranus',
+        '8': 'Neptune',
+    }
+    return planets[id];
+}
 
 const Test = {
     assertEquals: (output, expected) => {
@@ -46,3 +60,7 @@ const Test = {
 Test.assertEquals(getPlanetName(2), 'Venus');
 Test.assertEquals(getPlanetName(5), 'Jupiter');
 Test.assertEquals(getPlanetName(3), 'Earth');
+
+Test.assertEquals(getPlanetName_optimal(2), 'Venus');
+Test.assertEquals(getPlanetName_optimal(5), 'Jupiter');
+Test.assertEquals(getPlanetName_optimal(3), 'Earth');
