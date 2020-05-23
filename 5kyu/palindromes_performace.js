@@ -17,25 +17,45 @@
 */
 
 // SLOW...
-const howManyPalindromes = str => {
-    let result = 0;
-    let conc = "";
-    for(let i = 0; i < str.length; i++, result++) {
-        conc = str[i];
-        for(let j = i + 1; j < str.length; j++) {
-            if(isPalindrome(conc += str[j])) result++;
+// const howManyPalindromes = str => {
+//     let result = 0;
+//     let conc = "";
+//     for(let i = 0; i < str.length; i++, result++) {
+//         conc = str[i];
+//         for(let j = i + 1; j < str.length; j++) {
+//             if(isPalindrome(conc += str[j])) result++;
+//         }
+//         conc = "";
+//     }
+//     return result;
+// }
+
+// const isPalindrome = str => {
+//     for(let i = 0; i < str.length / 2; i++) {
+//         if(str[i] !== str[str.length - 1 - i]) return false;
+//     }
+//     return true;
+// }
+
+
+// fast enough
+const howManyPalindromes = s => {
+    counts = s.length
+    if (s[0].repeat(s.length) == s)
+        return s.length * (s.length + 1) / 2
+    for (i = 2; i <= s.length; i++)
+        for (j = 0; j <= s.length - i; j++) {
+            counts++
+            for (k = 0; k < i / 2; k++)
+                if (s[j + k] != s[j + i - k - 1]) {
+                    counts--
+                    break
+                }
         }
-        conc = "";
-    }
-    return result;
+    return counts
 }
 
-const isPalindrome = str => {
-    for(let i = 0; i < str.length / 2; i++) {
-        if(str[i] !== str[str.length - 1 - i]) return false;
-    }
-    return true;
-}
+
 
 const Test = {
     assertEquals: (output, expected) => {
