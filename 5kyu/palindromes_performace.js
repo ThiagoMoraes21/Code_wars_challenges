@@ -16,27 +16,26 @@
         abccba -> a, ab, abc, abcc, abccb, abccba, b, bc, bcc, bccb, bccba, c, cc, ccb, ccba, c, cb, cba, b, ba, a
 */
 
+// SLOW...
 const howManyPalindromes = str => {
     let result = 0;
     let conc = "";
-    for(let i = 0; i < str.length; i++) {
-        result++;
+    for(let i = 0; i < str.length; i++, result++) {
         conc = str[i];
         for(let j = i + 1; j < str.length; j++) {
-            conc += str[j];
-            if(isPalindrome(conc)) result++;
-            if(j + 1 === str.length) conc = "";
+            if(isPalindrome(conc += str[j])) result++;
         }
+        conc = "";
     }
     return result;
 }
+
 const isPalindrome = str => {
     for(let i = 0; i < str.length / 2; i++) {
         if(str[i] !== str[str.length - 1 - i]) return false;
     }
     return true;
 }
-
 
 const Test = {
     assertEquals: (output, expected) => {
@@ -49,4 +48,10 @@ Test.assertEquals(howManyPalindromes('aaa'), 6);
 Test.assertEquals(howManyPalindromes('abccba'), 9);
 Test.assertEquals(howManyPalindromes('feetea'), 8);
 
- 
+
+
+/*
+    sources: 
+        https://cp-algorithms.com/string/string-hashing.html
+        https://cp-algorithms.com/string/manacher.html
+*/
