@@ -32,14 +32,18 @@ const findNumber = array => {
 
 const findNumber_2 = array => {
     const obj = {};
-    for(const el of array) {
-        obj[el] = el;
-    }
+    for(const el of array) obj[el] = el;
     if(!obj['1']) return 1;
-    if(!obj['2']) return 2;
     for(const key in obj) {
-        if(obj[key] !== 1 && !obj[Number(key) - 1]) return Number(key) - 1;
-        if(obj[key] !== 1 && !obj[Number(key) + 1]) return Number(key) + 1;
+        if(!obj[Number(key) + 1]) return Number(key) + 1;
+    }
+}
+
+// FASTEST
+const findNumber_3 = array => {
+    const set = new Set(array);
+    for(let i = 0; i <= array.length; i++) {
+        if(!set.has(i + 1)) return i + 1;
     }
 }
 
@@ -67,3 +71,12 @@ assert.equal(findNumber_2([2, 3, 4]), 1);
 assert.equal(findNumber_2([13, 11, 10, 3, 2, 1, 4, 5, 6, 9, 7, 8]), 12);
 assert.equal(findNumber_2([1, 2, 3]), 4);
 assert.equal(findNumber_2([1]), 2);
+
+assert.equal(findNumber_3([1, 3, 4, 5, 6, 7, 8]), 2);
+assert.equal(findNumber_3([7, 8, 1, 2, 4, 5, 6]), 3);
+assert.equal(findNumber_3([1, 2, 3, 5]), 4);
+assert.equal(findNumber_3([1, 3]), 2);
+assert.equal(findNumber_3([2, 3, 4]), 1);
+assert.equal(findNumber_3([13, 11, 10, 3, 2, 1, 4, 5, 6, 9, 7, 8]), 12);
+assert.equal(findNumber_3([1, 2, 3]), 4);
+assert.equal(findNumber_3([1]), 2);
